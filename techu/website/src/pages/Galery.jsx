@@ -1,31 +1,15 @@
 import { useState, useEffect, useRef } from "react";
-import Comment from "../components/Comment";
+
 import "./Galery.css";
 import images from "../data/images.json";
+import Comments from "../components/Comments";
 
 function Galery() {
   const [image, setImage] = useState();
-  const comment = useRef();
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      author: "bob@amazon.com",
-      text: "This is awesome",
-    },
-    {
-      id: 2,
-      author: "alice@amazon.com",
-      text: "This is better than awesome",
-    },
-  ]);
 
   useEffect(() => {
     setImage(images[0]);
   }, []);
-
-  useEffect(() => {
-    console.log("Loading comments");
-  }, [image]);
 
   const nextImage = (image) => {
     let imageIndex = images.indexOf(image);
@@ -51,24 +35,8 @@ function Galery() {
     setImage(images[imageIndex]);
   };
 
-  function addComment(e) {
-    e.preventDefault();
-    setComments((current) => {
-      const newComments = [
-        {
-          id: 1,
-          author: "me",
-          text: comment.current.value,
-        },
-        ...current,
-      ];
-      console.log(newComments);
-      return newComments;
-    });
-  }
-
   return (
-    <div className="galery">
+    <div className="galery container">
       <h1>{image?.title}</h1>
       <h3>&copy;{image?.author}</h3>
       <div className="image-box">
@@ -78,19 +46,7 @@ function Galery() {
           <button onClick={() => nextImage(image)}>&gt;</button>
         </div>
       </div>
-
-      <form action="" className="comment-form">
-        <strong>Your comment:</strong>
-        <textarea rows="4" ref={comment}></textarea>
-        <button onClick={addComment}>Submit</button>
-      </form>
-
-      <div className="comments">
-        <h3>Comments:</h3>
-        {comments.map((c) => (
-          <Comment key={c.id} comment={c} />
-        ))}
-      </div>
+      <Comments imageId={image?.id} />
     </div>
   );
 }

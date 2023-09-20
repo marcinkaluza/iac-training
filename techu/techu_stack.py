@@ -10,7 +10,8 @@ from aws_cdk import (
     aws_cloudfront as cloudfront,
     aws_cloudfront_origins as origins,
     aws_dynamodb as dynamo,
-    aws_apigateway as api
+    aws_apigateway as api,
+    aws_cognito as cognito,
 )
 from constructs import Construct
 
@@ -100,5 +101,19 @@ class TechuStack(Stack):
                                   cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
                                   origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
                                   origin=origins.RestApiOrigin(apigateway, ))
+
+        pool = cognito.UserPool(self, "Pool", sign_in_aliases={"email": True})
+        pool.add_client("app-client",
+                        o_auth=cognito.OAuthSettings(
+                            flows=cognito.OAuthFlows(
+                                authorization_code_grant=True
+                            ),
+                            scopes=[cognito.OAuthScope.OPENID],
+                            callback_urls=[
+                                f'https://{distribution.distribution_domain_name}/', "http://localhost:3000/"],
+                            logout_urls=[
+                                f"https://{distribution.distribution_domain_name}/", "http://localhost:3000/"]
+                        )
+                        )
 
         CfnOutput(self, "website-url", value=distribution.domain_name)

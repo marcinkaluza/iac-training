@@ -7,14 +7,12 @@ import Galery from "./pages/Galery";
 function App() {
   return (
     <>
-      <div className="container">
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/galery" element={<Galery />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/galery" element={<Galery />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
