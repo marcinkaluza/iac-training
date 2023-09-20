@@ -36,17 +36,20 @@ class TechuStack(Stack):
                                               )
                                               )
 
+        # website_assets = assets.Asset(self, "website-assets",
+        #                               path=f"{dirname}/website",
+        #                               bundling=BundlingOptions(
+        #                                   image=lambda_.Runtime.NODEJS_18_X.bundling_image,
+        #                                   command=["bash", "-c", "npm ci && npm run build && cp -aur ./dist/* /asset-output"
+        #                                            ],
+        #                                   security_opt="no-new-privileges:false",
+        #                                   network="host",
+        #                                   user="root"
+        #                               )
+        #                               )
+
         website_assets = assets.Asset(self, "website-assets",
-                                      path=f"{dirname}/website",
-                                      bundling=BundlingOptions(
-                                          image=lambda_.Runtime.NODEJS_18_X.bundling_image,
-                                          command=["bash", "-c", "npm ci && npm run build && cp -aur ./dist/* /asset-output"
-                                                   ],
-                                          security_opt="no-new-privileges:false",
-                                          network="host",
-                                          user="root"
-                                      )
-                                      )
+                                      path=f"{dirname}/website/dist")
 
         comments_table = dynamo.Table(self, "comments-table", table_name="Comments",
                                       partition_key=dynamo.Attribute(
@@ -75,9 +78,7 @@ class TechuStack(Stack):
                                  )
 
         root = apigateway.root.add_resource("api")
-        books = root.add_resource("comments")
-        books.add_method("GET")
-        books.add_method("POST")
+        comments = root.add_resource("comments")
 
         website_bucket = s3.Bucket(self, "website-bucket",
                                    encryption=s3.BucketEncryption.S3_MANAGED,
@@ -99,21 +100,36 @@ class TechuStack(Stack):
 
         distribution.add_behavior(path_pattern="/api/*",
                                   cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                                  allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
                                   origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
                                   origin=origins.RestApiOrigin(apigateway, ))
 
-        pool = cognito.UserPool(self, "Pool", sign_in_aliases={"email": True})
-        pool.add_client("app-client",
-                        o_auth=cognito.OAuthSettings(
-                            flows=cognito.OAuthFlows(
-                                authorization_code_grant=True
-                            ),
-                            scopes=[cognito.OAuthScope.OPENID],
-                            callback_urls=[
-                                f'https://{distribution.distribution_domain_name}/', "http://localhost:3000/"],
-                            logout_urls=[
-                                f"https://{distribution.distribution_domain_name}/", "http://localhost:3000/"]
-                        )
-                        )
+        # Cognito user pool
+        pool = cognito.UserPool(self, "Pool",
+                                sign_in_aliases={"email": True},
+                                self_sign_up_enabled=True)
+        client = pool.add_client("app-client",
+                                 o_auth=cognito.OAuthSettings(
+                                     flows=cognito.OAuthFlows(
+                                         authorization_code_grant=True
+                                     ),
+                                     scopes=[cognito.OAuthScope.OPENID],
+                                     callback_urls=[
+                                         f'https://{distribution.distribution_domain_name}/', "http://localhost:3000/"],
+                                     logout_urls=[
+                                         f"https://{distribution.distribution_domain_name}/", "http://localhost:3000/"]
+                                 )
+                                 )
+
+        auth = api.CognitoUserPoolsAuthorizer(self, "authorizer",
+                                              cognito_user_pools=[pool]
+                                              )
+
+        comments.add_method("GET")
+        comments.add_method("POST",
+                            authorizer=auth,
+                            authorization_type=api.AuthorizationType.COGNITO)
 
         CfnOutput(self, "website-url", value=distribution.domain_name)
+        CfnOutput(self, "userpool-id", value=pool.user_pool_id)
+        CfnOutput(self, "client-id", value=client.user_pool_client_id)

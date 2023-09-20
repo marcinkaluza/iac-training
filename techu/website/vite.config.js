@@ -9,16 +9,18 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "https://djm5s3dmokx3f.cloudfront.net",
-        changeOrigin: false,
+        changeOrigin: true,
         secure: true,
         //rewrite: (path) => path.replace("/api", ""),
       },
-      "/bapi": {
-        target: "https://jsonplaceholder.typicode.com",
-        changeOrigin: false,
-        secure: false,
-        rewrite: (path) => path.replace("/bapi", ""),
-      },
     },
+  },
+  resolve: {
+    alias: [
+      {
+        find: "./runtimeConfig",
+        replacement: "./runtimeConfig.browser", // ensures browser compatible version of AWS JS SDK is used
+      },
+    ],
   },
 });

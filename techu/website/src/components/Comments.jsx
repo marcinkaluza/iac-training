@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import Comment from "./Comment";
 
-function Comments({ imageId }) {
+function Comments({ user, imageId }) {
   const comment = useRef();
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    const loader = async () => {
-      const response = await fetch(`/api/comments/imageId=${imageId}`, {
+    const load = async () => {
+      const response = await fetch(`/api/comments?imageId=${imageId}`, {
         headers: {
           accepts: "application/json",
         },
@@ -16,20 +16,29 @@ function Comments({ imageId }) {
       setComments(data);
     };
 
-    loader();
+    if (imageId) load();
   }, [imageId]);
 
-  function addComment(e) {
+  async function addComment(e) {
     e.preventDefault();
+
+    const response = await fetch("/api/comments", {
+      method: "POST",
+      headers: {
+        accepts: "application/json",
+        "Content-Type": "application/json",
+        authorization: `Bearer ${user.signInUserSession.idToken.jwtToken}`,
+      },
+      body: JSON.stringify({
+        imageId: imageId,
+        text: comment.current.value,
+      }),
+    });
+
+    const newComment = await response.json();
+
     setComments((current) => {
-      const newComments = [
-        {
-          id: 1,
-          author: "me",
-          text: comment.current.value,
-        },
-        ...current,
-      ];
+      const newComments = [newComment, ...current];
       console.log(newComments);
       return newComments;
     });
@@ -46,7 +55,7 @@ function Comments({ imageId }) {
       <div className="comments">
         <h3>Comments:</h3>
         {comments.map((c) => (
-          <Comment key={c.id} comment={c} />
+          <Comment key={c.commentId} comment={c} />
         ))}
       </div>
     </>

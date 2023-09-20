@@ -68,7 +68,7 @@ def createItem():
     validate(instance=item, schema=assetSchema)
 
     item['commentId'] = str(uuid.uuid4())
-    item['author'] = app.current_event.request_context.authorizer.claims["cognito:username"]
+    item['author'] = app.current_event.request_context.authorizer.claims['email']
 
     response = assets.put_item(Item=item)
 

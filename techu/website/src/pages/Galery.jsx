@@ -3,8 +3,9 @@ import { useState, useEffect, useRef } from "react";
 import "./Galery.css";
 import images from "../data/images.json";
 import Comments from "../components/Comments";
+import { withAuthenticator } from "@aws-amplify/ui-react";
 
-function Galery() {
+function Galery({ user }) {
   const [image, setImage] = useState();
 
   useEffect(() => {
@@ -46,9 +47,9 @@ function Galery() {
           <button onClick={() => nextImage(image)}>&gt;</button>
         </div>
       </div>
-      <Comments imageId={image?.id} />
+      <Comments user={user} imageId={image?.id} />
     </div>
   );
 }
 
-export default Galery;
+export default withAuthenticator(Galery);

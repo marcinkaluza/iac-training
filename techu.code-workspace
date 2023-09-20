@@ -4,6 +4,9 @@
       "path": "./techu"
     },
     {
+      "path": "."
+    },
+    {
       "path": "./techu/comments-service"
     },
     {
