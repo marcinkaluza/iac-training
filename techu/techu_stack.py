@@ -8,7 +8,8 @@ from aws_cdk import (
     aws_s3 as s3,
     aws_lambda as lambda_,
     aws_cloudfront as cloudfront,
-    aws_cloudfront_origins as origins
+    aws_cloudfront_origins as origins,
+    aws_dynamodb as dynamo,
 )
 from constructs import Construct
 
@@ -33,24 +34,24 @@ class TechuStack(Stack):
                              )
                              )
 
-        website = assets.Asset(self, "WebsiteAsset",
-                               path=f"{dirname}/website",
-                               bundling=BundlingOptions(
-                                   image=lambda_.Runtime.NODEJS_18_X.bundling_image,
-                                   command=["bash", "-c", "npm ci && npm run build && cp -aur ./dist/* /asset-output"
-                                            ],
-                                   security_opt="no-new-privileges:false",
-                                   network="host",
-                                   user="root"
-                               )
-                               )
+        website_assets = assets.Asset(self, "website-assets",
+                                      path=f"{dirname}/website",
+                                      bundling=BundlingOptions(
+                                          image=lambda_.Runtime.NODEJS_18_X.bundling_image,
+                                          command=["bash", "-c", "npm ci && npm run build && cp -aur ./dist/* /asset-output"
+                                                   ],
+                                          security_opt="no-new-privileges:false",
+                                          network="host",
+                                          user="root"
+                                      )
+                                      )
 
         website_bucket = s3.Bucket(self, "website-bucket",
                                    encryption=s3.BucketEncryption.S3_MANAGED,
                                    auto_delete_objects=True,
                                    removal_policy=RemovalPolicy.DESTROY)
 
-        distribution = cloudfront.Distribution(self, "Distribution",
+        distribution = cloudfront.Distribution(self, "distribution",
                                                default_root_object="index.html",
                                                default_behavior=cloudfront.BehaviorOptions(
                                                    origin=origins.S3Origin(website_bucket))
@@ -58,13 +59,19 @@ class TechuStack(Stack):
 
         deployment.BucketDeployment(self, "website-deployment",
                                     sources=[deployment.Source.bucket(
-                                        website.bucket, website.s3_object_key)],
+                                        website_assets.bucket, website_assets.s3_object_key)],
                                     destination_bucket=website_bucket,
                                     distribution=distribution,
                                     distribution_paths=["/*"])
 
-        CfnOutput(self, "website_bucket_name",
-                  value=website_bucket.bucket_name)
-        CfnOutput(self, "assets_bucket_name", value=website.s3_bucket_name)
-        CfnOutput(self, "assets_object_name", value=website.s3_object_key)
-        CfnOutput(self, "website_url", value=distribution.domain_name)
+        dynamo.Table(self, "comments-table", table_name="Comments",
+                     partition_key=dynamo.Attribute(
+                         name="imageId",
+                         type=dynamo.AttributeType.NUMBER
+                     ),
+                     sort_key=dynamo.Attribute(
+                         name="commentId",
+                         type=dynamo.AttributeType.STRING
+                     ))
+
+        CfnOutput(self, "website-url", value=distribution.domain_name)
