@@ -10,6 +10,7 @@ from aws_cdk import (
     aws_cloudfront as cloudfront,
     aws_cloudfront_origins as origins,
     aws_dynamodb as dynamo,
+    aws_apigateway as api
 )
 from constructs import Construct
 
@@ -23,16 +24,16 @@ class TechuStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        asset = assets.Asset(self, "BundledAsset",
-                             path=f"{dirname}/authorizer/src",
-                             bundling=BundlingOptions(
-                                 image=lambda_.Runtime.PYTHON_3_10.bundling_image,
-                                 command=["bash", "-c", "pip install -r requirements.txt -t /asset-output && cp -au . /asset-output"
-                                          ],
-                                 security_opt="no-new-privileges:true",
-                                 network="host"
-                             )
-                             )
+        comments_service_asset = assets.Asset(self, "comments-service-asset",
+                                              path=f"{dirname}/comments-service/src",
+                                              bundling=BundlingOptions(
+                                                  image=lambda_.Runtime.PYTHON_3_10.bundling_image,
+                                                  command=["bash", "-c", "pip install -r requirements.txt -t /asset-output && cp -au . /asset-output"
+                                                           ],
+                                                  security_opt="no-new-privileges:true",
+                                                  network="host"
+                                              )
+                                              )
 
         website_assets = assets.Asset(self, "website-assets",
                                       path=f"{dirname}/website",
@@ -64,14 +65,35 @@ class TechuStack(Stack):
                                     distribution=distribution,
                                     distribution_paths=["/*"])
 
-        dynamo.Table(self, "comments-table", table_name="Comments",
-                     partition_key=dynamo.Attribute(
-                         name="imageId",
-                         type=dynamo.AttributeType.NUMBER
-                     ),
-                     sort_key=dynamo.Attribute(
-                         name="commentId",
-                         type=dynamo.AttributeType.STRING
-                     ))
+        comments_table = dynamo.Table(self, "comments-table", table_name="Comments",
+                                      partition_key=dynamo.Attribute(
+                                          name="imageId",
+                                          type=dynamo.AttributeType.NUMBER
+                                      ),
+                                      sort_key=dynamo.Attribute(
+                                          name="commentId",
+                                          type=dynamo.AttributeType.STRING
+                                      ))
+        # Comments service
+        comments_service = lambda_.Function(self, "comments-service",
+                                            function_name="comments-service",
+                                            handler="app.lambda_handler",
+                                            runtime=lambda_.Runtime.PYTHON_3_10,
+                                            code=lambda_.Code.from_bucket(comments_service_asset.bucket, comments_service_asset.s3_object_key))
+
+        comments_table.grant_read_write_data(comments_service)
+
+        # API Gateway
+        comments_service_integration = api.LambdaIntegration(
+            handler=comments_service, allow_test_invoke=True)
+
+        apigateway = api.RestApi(self, "api",
+            default_integration=comments_service_integration
+        )
+
+        root = apigateway.root.add_resource("api")
+        books = root.add_resource("comments")
+        books.add_method("GET") 
+        books.add_method("POST")
 
         CfnOutput(self, "website-url", value=distribution.domain_name)

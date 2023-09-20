@@ -83,6 +83,8 @@ def getItem():
     id = app.current_event.get_query_string_value(
         name=KEY_NAME, default_value=None)
 
+    id = Decimal(id)
+
     response = assets.query(KeyConditionExpression=Key(
         KEY_NAME).eq(id), ConsistentRead=True)
     data = response['Items']

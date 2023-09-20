@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "path": "./techu"
+    },
+    {
+      "path": "./techu/comments-service"
+    },
+    {
+      "path": "./techu/website"
+    }
+  ],
+  "settings": {}
+}
