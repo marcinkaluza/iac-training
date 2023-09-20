@@ -1,0 +1,5 @@
+pyjwt[crypto]
+boto3
+aws_xray_sdk
+munch
+aws-lambda-powertools

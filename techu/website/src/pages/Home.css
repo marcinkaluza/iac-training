@@ -1,0 +1,24 @@
+.home {
+  height: 100vh;
+  background-image: url("/img/2.jpg");
+  background-size: cover;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: green;
+  height: 100%;
+}
+
+.btn {
+  color: white;
+  background-color: green;
+  border: 0px;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+  cursor: pointer;
+}

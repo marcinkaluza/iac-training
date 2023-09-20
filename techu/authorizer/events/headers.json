@@ -1,0 +1,55 @@
+{
+  "type": "REQUEST",
+  "methodArn": "arn:aws:execute-api:eu-west-1:942186722447:8535lj9e76/$default/$connect",
+  "headers": {
+    "authorization": "eyJraWQiOiI4RGRpMzgxNkZVMnZpbWgyWUcwQkJhMUFEampwTlM4VzZ4em95aGpZYk1NPSIsImFsZyI6IlJTMjU2In0.eyJhdF9oYXNoIjoiTHVFczVYZ3NpQ0J5eDRPUzlnZUpQZyIsInN1YiI6ImMyZTU4NDM0LWMwYzEtNzBhZC01NWMxLTRhNjE2ZmMyY2Y3NCIsImNvZ25pdG86Z3JvdXBzIjpbImV1LXdlc3QtMV9EZXhYWkU2M09fRmFjZWJvb2siXSwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuZXUtd2VzdC0xLmFtYXpvbmF3cy5jb21cL2V1LXdlc3QtMV9EZXhYWkU2M08iLCJjb2duaXRvOnVzZXJuYW1lIjoiRmFjZWJvb2tfMTAyMTAzOTYwNjM2MTU5NjMiLCJvcmlnaW5fanRpIjoiMzRmZDM1YzUtOWRkYS00MWUxLThjMTktN2FkYmViNDdkNWJhIiwiYXVkIjoiMWI3bDE5cWdybmlnYmpuNDJxNmNuNnV2aW0iLCJpZGVudGl0aWVzIjpbeyJ1c2VySWQiOiIxMDIxMDM5NjA2MzYxNTk2MyIsInByb3ZpZGVyTmFtZSI6IkZhY2Vib29rIiwicHJvdmlkZXJUeXBlIjoiRmFjZWJvb2siLCJpc3N1ZXIiOm51bGwsInByaW1hcnkiOiJ0cnVlIiwiZGF0ZUNyZWF0ZWQiOiIxNjkxOTIzODcwMDY3In1dLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTY5MjAxMTE3NiwiZXhwIjoxNjkyMDE0Nzc2LCJpYXQiOjE2OTIwMTExNzYsImp0aSI6ImZmZjI0ODQ4LWYxM2ItNDhjZC1hM2QwLWNmNjM5ODBiNTkxYyIsImVtYWlsIjoibWFyY2luLmthbHV6YUBvdXRsb29rLmNvbSJ9.qkC37YDZs7SZqcc223hLSQwVQ6rAaQ5f45jH_Zgr8FRU3VARos2Kf7VCRbEgGDiFsVocjtModdh8jRPb8QMnU3G1hjy-bW2Tx-LbBjqS2u_HThaTp6yVZo6dgevCzeHwBOigRzF_a917M1ulSYcq-RzVAD66bjLrnMJtlznE0ws47OBW2viMRGgFkdS1mTF0prPQTOXMyuvSFgzn8YH3U6e5HE0xffLRX9liY_n8Chf5uqONhKk4Pf7yyW-5YzjUUUjh6UqFikbJbcasMrKFVTklspFsjtjXXOZOEXLy1I31F0x7BoD7SRWs2It1ge5RgVI2fbfyRiRtPxOuMcsowQ",
+    "Connection": "upgrade",
+    "content-length": "0",
+    "Host": "wss.fnolpoc.mkaluz.people.aws.dev",
+    "Sec-WebSocket-Extensions": "permessage-deflate; client_max_window_bits",
+    "Sec-WebSocket-Key": "l56e39/yLO20OS1yowlehA==",
+    "Sec-WebSocket-Version": "13",
+    "Upgrade": "websocket",
+    "X-Amzn-Trace-Id": "Root=1-62d81c12-7c37dedf16cf06eb3dcec352",
+    "X-Forwarded-For": "54.240.197.239",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https"
+  },
+  "multiValueHeaders": {
+    "Connection": ["upgrade"],
+    "content-length": ["0"],
+    "Host": ["wss.fnolpoc.mkaluz.people.aws.dev"],
+    "Sec-WebSocket-Extensions": ["permessage-deflate; client_max_window_bits"],
+    "Sec-WebSocket-Key": ["l56e39/yLO20OS1yowlehA=="],
+    "Sec-WebSocket-Version": ["13"],
+    "Upgrade": ["websocket"],
+    "X-Amzn-Trace-Id": ["Root=1-62d81c12-7c37dedf16cf06eb3dcec352"],
+    "X-Forwarded-For": ["54.240.197.239"],
+    "X-Forwarded-Port": ["443"],
+    "X-Forwarded-Proto": ["https"]
+  },
+  "queryStringParameters": {},
+  "multiValueQueryStringParameters": {
+    "Authorization": [
+      "eyJraWQiOiI4RGRpMzgxNkZVMnZpbWgyWUcwQkJhMUFEampwTlM4VzZ4em95aGpZYk1NPSIsImFsZyI6IlJTMjU2In0.eyJhdF9oYXNoIjoiTHVFczVYZ3NpQ0J5eDRPUzlnZUpQZyIsInN1YiI6ImMyZTU4NDM0LWMwYzEtNzBhZC01NWMxLTRhNjE2ZmMyY2Y3NCIsImNvZ25pdG86Z3JvdXBzIjpbImV1LXdlc3QtMV9EZXhYWkU2M09fRmFjZWJvb2siXSwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuZXUtd2VzdC0xLmFtYXpvbmF3cy5jb21cL2V1LXdlc3QtMV9EZXhYWkU2M08iLCJjb2duaXRvOnVzZXJuYW1lIjoiRmFjZWJvb2tfMTAyMTAzOTYwNjM2MTU5NjMiLCJvcmlnaW5fanRpIjoiMzRmZDM1YzUtOWRkYS00MWUxLThjMTktN2FkYmViNDdkNWJhIiwiYXVkIjoiMWI3bDE5cWdybmlnYmpuNDJxNmNuNnV2aW0iLCJpZGVudGl0aWVzIjpbeyJ1c2VySWQiOiIxMDIxMDM5NjA2MzYxNTk2MyIsInByb3ZpZGVyTmFtZSI6IkZhY2Vib29rIiwicHJvdmlkZXJUeXBlIjoiRmFjZWJvb2siLCJpc3N1ZXIiOm51bGwsInByaW1hcnkiOiJ0cnVlIiwiZGF0ZUNyZWF0ZWQiOiIxNjkxOTIzODcwMDY3In1dLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTY5MjAxMTE3NiwiZXhwIjoxNjkyMDE0Nzc2LCJpYXQiOjE2OTIwMTExNzYsImp0aSI6ImZmZjI0ODQ4LWYxM2ItNDhjZC1hM2QwLWNmNjM5ODBiNTkxYyIsImVtYWlsIjoibWFyY2luLmthbHV6YUBvdXRsb29rLmNvbSJ9.qkC37YDZs7SZqcc223hLSQwVQ6rAaQ5f45jH_Zgr8FRU3VARos2Kf7VCRbEgGDiFsVocjtModdh8jRPb8QMnU3G1hjy-bW2Tx-LbBjqS2u_HThaTp6yVZo6dgevCzeHwBOigRzF_a917M1ulSYcq-RzVAD66bjLrnMJtlznE0ws47OBW2viMRGgFkdS1mTF0prPQTOXMyuvSFgzn8YH3U6e5HE0xffLRX9liY_n8Chf5uqONhKk4Pf7yyW-5YzjUUUjh6UqFikbJbcasMrKFVTklspFsjtjXXOZOEXLy1I31F0x7BoD7SRWs2It1ge5RgVI2fbfyRiRtPxOuMcsowQ"
+    ]
+  },
+  "stageVariables": {},
+  "requestContext": {
+    "routeKey": "$connect",
+    "eventType": "CONNECT",
+    "extendedRequestId": "VklS2E3mjoEFeeQ=",
+    "requestTime": "20/Jul/2022:15:15:30 +0000",
+    "messageDirection": "IN",
+    "stage": "$default",
+    "connectedAt": 1658330130011,
+    "requestTimeEpoch": 1658330130012,
+    "identity": {
+      "sourceIp": "54.240.197.239"
+    },
+    "requestId": "VklS2E3mjoEFeeQ=",
+    "domainName": "wss.fnolpoc.mkaluz.people.aws.dev",
+    "connectionId": "VklS2f-mjoECEEw=",
+    "apiId": "8535lj9e76"
+  }
+}
