@@ -72,9 +72,11 @@ function Galery() {
       <h1>{image?.title}</h1>
       <h3>&copy;{image?.author}</h3>
       <div className="image-box">
-        <button onClick={() => previousImage(image)}>&lt;</button>
         <img className="image" src={image?.url}></img>
-        <button onClick={() => nextImage(image)}>&gt;</button>
+        <div className="button-bar">
+          <button onClick={() => previousImage(image)}>&lt;</button>
+          <button onClick={() => nextImage(image)}>&gt;</button>
+        </div>
       </div>
 
       <form action="" className="comment-form">
