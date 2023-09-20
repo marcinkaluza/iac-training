@@ -47,24 +47,6 @@ class TechuStack(Stack):
                                       )
                                       )
 
-        website_bucket = s3.Bucket(self, "website-bucket",
-                                   encryption=s3.BucketEncryption.S3_MANAGED,
-                                   auto_delete_objects=True,
-                                   removal_policy=RemovalPolicy.DESTROY)
-
-        distribution = cloudfront.Distribution(self, "distribution",
-                                               default_root_object="index.html",
-                                               default_behavior=cloudfront.BehaviorOptions(
-                                                   origin=origins.S3Origin(website_bucket))
-                                               )
-
-        deployment.BucketDeployment(self, "website-deployment",
-                                    sources=[deployment.Source.bucket(
-                                        website_assets.bucket, website_assets.s3_object_key)],
-                                    destination_bucket=website_bucket,
-                                    distribution=distribution,
-                                    distribution_paths=["/*"])
-
         comments_table = dynamo.Table(self, "comments-table", table_name="Comments",
                                       partition_key=dynamo.Attribute(
                                           name="imageId",
@@ -88,12 +70,35 @@ class TechuStack(Stack):
             handler=comments_service, allow_test_invoke=True)
 
         apigateway = api.RestApi(self, "api",
-            default_integration=comments_service_integration
-        )
+                                 default_integration=comments_service_integration
+                                 )
 
         root = apigateway.root.add_resource("api")
         books = root.add_resource("comments")
-        books.add_method("GET") 
+        books.add_method("GET")
         books.add_method("POST")
+
+        website_bucket = s3.Bucket(self, "website-bucket",
+                                   encryption=s3.BucketEncryption.S3_MANAGED,
+                                   auto_delete_objects=True,
+                                   removal_policy=RemovalPolicy.DESTROY)
+
+        distribution = cloudfront.Distribution(self, "distribution",
+                                               default_root_object="index.html",
+                                               default_behavior=cloudfront.BehaviorOptions(
+                                                   origin=origins.S3Origin(website_bucket))
+                                               )
+
+        deployment.BucketDeployment(self, "website-deployment",
+                                    sources=[deployment.Source.bucket(
+                                        website_assets.bucket, website_assets.s3_object_key)],
+                                    destination_bucket=website_bucket,
+                                    distribution=distribution,
+                                    distribution_paths=["/*"])
+
+        distribution.add_behavior(path_pattern="/api/*",
+                                  cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                                  origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+                                  origin=origins.RestApiOrigin(apigateway, ))
 
         CfnOutput(self, "website-url", value=distribution.domain_name)
