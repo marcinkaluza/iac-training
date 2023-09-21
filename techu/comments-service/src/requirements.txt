@@ -1,5 +1,0 @@
-boto3
-aws_xray_sdk
-munch
-jsonschema
-aws-lambda-powertools

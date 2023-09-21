@@ -3,11 +3,11 @@ import os
 
 import aws_cdk as cdk
 
-from techu.techu_stack import TechuStack
+from application.application_stack import ApplicationStack
 
 
 app = cdk.App()
-TechuStack(app, "TechuStack",
+ApplicationStack(app, "TechuStack",
     # If you don't specify 'env', this stack will be environment-agnostic.
     # Account/Region-dependent features and context lookups will not work,
     # but a single synthesized template can be deployed anywhere.
