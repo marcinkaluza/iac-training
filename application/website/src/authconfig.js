@@ -13,10 +13,10 @@ const amplifyConfig = {
     // identityPoolRegion: 'eu-west-1',
 
     // OPTIONAL - Amazon Cognito User Pool ID
-    userPoolId: "eu-west-1_zxL7oMYah",
+    userPoolId: "eu-west-1_xIuDwcPnB",
 
     // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
-    userPoolWebClientId: "5falsk747k8p15dkh4l2jt0fnk",
+    userPoolWebClientId: "783ee5s6r8f2t36vqkckoibfbm",
 
     // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
     mandatorySignIn: false,

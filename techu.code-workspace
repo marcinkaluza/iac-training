@@ -1,16 +1,16 @@
 {
   "folders": [
     {
-      "path": "./techu"
+      "path": "./application"
     },
     {
       "path": "."
     },
     {
-      "path": "./techu/comments-service"
+      "path": "./application/comments-service"
     },
     {
-      "path": "./techu/website"
+      "path": "./application/website"
     }
   ],
   "settings": {}
