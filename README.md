@@ -1,58 +1,36 @@
+# Welcome to Tech-U CDK training!
 
-# Welcome to your CDK Python project!
+This repository conatains code for a sample serverless web application. All that is missing is AWS infrastructure required
+to run it on, which is where you come in. Your task is to create a CDK stack containing all resources as per the diagram below.
 
-This is a blank project for CDK development with Python.
+![webapp](Application.png)
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+# Initializing the project
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+First clone this repository to your local machine:
 
-To manually create a virtualenv on MacOS and Linux:
+```
+git clone ....
+```
+
+Once the repo has been cloned, open terminal in the `iac-training` directory and execute following commands:
 
 ```
 $ python3 -m venv .venv
-```
-
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
-
-```
 $ source .venv/bin/activate
-```
-
-If you are a Windows platform, you would activate the virtualenv like this:
-
-```
-% .venv\Scripts\activate.bat
-```
-
-Once the virtualenv is activated, you can install the required dependencies.
-
-```
 $ pip install -r requirements.txt
 ```
 
-At this point you can now synthesize the CloudFormation template for this code.
-
+Make sure that you have valid AWS credentials available by executinig
 ```
-$ cdk synth
+aws sts get-caller-identity
 ```
+Assuming everything worked as expected, you can try to deploy the application by executin ```cdk deploy```. As we haven't defined any resources yet, the application will not provision anything but it will allow to check that everything is working.
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
+# Building the infrastructure
 
-## Useful commands
-
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
-
-Enjoy!
+Open visual studio code. In the ```iac-training``` directory execute 
+```
+$ code .
+```
+Once the sulution has been opened, open the [application_stack.py](./application/application_stack.py) file and follow the instruction within it.
