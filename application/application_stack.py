@@ -26,7 +26,6 @@ class ApplicationStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # 1. Create assets for the code of the comments-service.
-        # Follow the instructions in README.md in order to build it.
         # The path of your asset shouild be set to f"{dirname}/comments-service/src/dist".
         # set bundling to:
         # BundlingOptions(
@@ -40,18 +39,7 @@ class ApplicationStack(Stack):
         # )
         # The documentation is available at:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_s3_assets/Asset.html#asset
-        comments_service_asset = assets.Asset(self, "comments-service-asset",
-                                              path=f"{dirname}/comments-service/src",
-                                              bundling=BundlingOptions(
-                                                  image=lambda_.Runtime.PYTHON_3_10.bundling_image,
-                                                  command=["bash",
-                                                           "-c",
-                                                           "pip install -r requirements.txt -t /asset-output && cp -au . /asset-output"
-                                                           ],
-                                                  security_opt="no-new-privileges:true",
-                                                  network="host"
-                                              )
-                                              )
+        comments_service_asset = None
 
         # 2. Create dynamo db table for storing comments.
         # The table name should be set to "Comments", partition key should
@@ -59,87 +47,58 @@ class ApplicationStack(Stack):
         # Also set the table's removal policy to DESTROY
         # The documentation is available at:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_dynamodb/Table.html#aws_cdk.aws_dynamodb.Table
-        comments_table = dynamo.Table(self, "comments-table",
-                                      table_name="Comments",
-                                      removal_policy=RemovalPolicy.DESTROY,
-                                      partition_key=dynamo.Attribute(
-                                          name="imageId",
-                                          type=dynamo.AttributeType.NUMBER
-                                      ),
-                                      sort_key=dynamo.Attribute(
-                                          name="commentId",
-                                          type=dynamo.AttributeType.STRING
-                                      ))
+        comments_table = None
 
         # 3. Create lambda functions named "comments-service".
         # The handler should be set to "app.lambda_handler", runtime tu Pythoin 3.10
         # and code should come from the bucket containing your lambda asset
         # The documentation is available at:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_lambda/Function.html
-        comments_service = lambda_.Function(self, "comments-service",
-                                            function_name="comments-service",
-                                            handler="app.lambda_handler",
-                                            runtime=lambda_.Runtime.PYTHON_3_10,
-                                            code=lambda_.Code.from_bucket(comments_service_asset.bucket, comments_service_asset.s3_object_key))
+        comments_service = None
 
         # 4. Grant the comments service access read & write access to the table
         # created in step 2. using one of the grant* methods
-        comments_table.grant_read_write_data(comments_service)
 
-        # 5. Create API Gatewaylambda integration.
+        # 5. Create API Gateway lambda integration.
         # Set the handler to comments service from step 3. Allow test invocations
         # The documentation is available at:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_apigateway/LambdaIntegration.html
-        comments_service_integration = api.LambdaIntegration(
-            handler=comments_service, allow_test_invoke=True)
+        comments_service_integration = None
 
         # 6. Create REST API gateway. Set the default integration to one created in step 5.
         # The documentation is available at:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_apigateway/RestApi.html
-        apigateway = api.RestApi(self, "api",
-                                 default_integration=comments_service_integration
-                                 )
+        apigateway = None
 
         # 7. Add a resource named "api" to the REST api created in step 6.
-        root = apigateway.root.add_resource("api")
+        root = None
         # 8. Add a resource named "comments" to the resource created in step 7.
-        comments = root.add_resource("comments")
+        comments = None
 
         # 9. Create S3 bucket to hold the asssets for cloudfront distribution
         # set bucket encryption to S3_MANAGED, allow auto delete of objects and
         # set removal policy to DESTROY
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_s3/Bucket.html#bucket
-        website_bucket = s3.Bucket(self, "website-bucket",
-                                   encryption=s3.BucketEncryption.S3_MANAGED,
-                                   auto_delete_objects=True,
-                                   removal_policy=RemovalPolicy.DESTROY)
+        website_bucket = None
 
         # 10. Create cloudfront distribution to host the website
         # Set the default root object to "index.html" and default behavior to S3 origin pointing to
         # the bucket created in step 9.
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_cloudfront/Distribution.html#distribution
-        distribution = cloudfront.Distribution(self, "distribution",
-                                               default_root_object="index.html",
-                                               default_behavior=cloudfront.BehaviorOptions(
-                                                   origin=origins.S3Origin(website_bucket))
-                                               )
+        distribution = None
 
         # 11. Add behaviour for the API to cloudfront distribution
-        # The caching policy should be set to CACHING_DISABLED, the origin request policy should be set to
-        # ALL_VIEWER_EXCEPT_HOST_HEADER, and the origin should be set to RestApiOrigin pointing to the
-        # API gateway created in step 6.
-        distribution.add_behavior(path_pattern="/api/*",
-                                  cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
-                                  allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
-                                  origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
-                                  origin=origins.RestApiOrigin(apigateway))
+        # The path pattern should be set to "/api/*"
+        # caching policy should be set to CACHING_DISABLED,
+        # origin request policy should be set to ALL_VIEWER_EXCEPT_HOST_HEADER,
+        # allowed methods should be set to ALLOW_ALL
+        # and the origin should be set to RestApiOrigin pointing to the API gateway created in step 6.
 
         # 12. Create asset containing web application's code. You need to follow README.md instructions in
         # order to build the application first. The asset's path should be set to f"{dirname}/website/dist"
         # THe documentation is available at:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_s3_assets/Asset.html#asset
-        website_assets = assets.Asset(self, "website-assets",
-                                      path=f"{dirname}/website/dist")
+        website_assets = None
 
         # 13. Create bucket deployment
         # The deployment will copy and unzip the web app assets to the cloudfront distribution's bucket. Set the
@@ -147,49 +106,31 @@ class ApplicationStack(Stack):
         # website bucket from step 9. Set the distribution to the distribution created in step 10 and distribution paths to ["/*"]
         # The documentation is available at:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_s3_deployment/BucketDeployment.html#bucketdeployment
-        deployment.BucketDeployment(self, "website-deployment",
-                                    sources=[deployment.Source.bucket(
-                                        website_assets.bucket, website_assets.s3_object_key)],
-                                    destination_bucket=website_bucket,
-                                    distribution=distribution,
-                                    distribution_paths=["/*"])
 
         # 14. Create cognito user pool
         # set sign in aliases to {"email": True} and enable self signup
         # The documentation is available at:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_cognito/UserPool.html#userpool
-        pool = cognito.UserPool(self, "Pool",
-                                sign_in_aliases={"email": True},
-                                self_sign_up_enabled=True)
-
+        pool = None
         # 15. Add a client to the user pool created in step 14.
-        client = pool.add_client("app-client")
+        client = None
 
         # 16. Create user pool authorizer
         # Set the user pool of the authorizer to the pool created in step 14.
         # The documentation is available at:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_apigateway/CognitoUserPoolsAuthorizer.html#cognitouserpoolsauthorizer
-        auth = api.CognitoUserPoolsAuthorizer(self, "authorizer",
-                                              cognito_user_pools=[pool]
-                                              )
+        auth = None
 
         # 17. Add a GET method to the API resource created in step 8.
-        comments.add_method("GET")
 
         # 18. Add a POST method to the API resource created in step 8. Set the authorization type to COGNITO
         # and authorizer to once created in step 16.
-        comments.add_method("POST",
-                            authorizer=auth,
-                            authorization_type=api.AuthorizationType.COGNITO)
 
         # 19: Create outputs for:
         #  - Cloudfront Distribution's domain name (from step 10)
         #  - User pool ID (from step 14)
         #  - User pool client's ID (from step 15)
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk/CfnOutput.html#cfnoutput
-        CfnOutput(self, "website-url", value=distribution.domain_name)
-        CfnOutput(self, "userpool-id", value=pool.user_pool_id)
-        CfnOutput(self, "client-id", value=client.user_pool_client_id)
 
         # 20. Congratulations! Now run "CDK synth" to verify everything works as expected
         # and follow it with "cdk deploy"
