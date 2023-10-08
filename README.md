@@ -69,4 +69,4 @@ const amplifyConfig = {
 };
 ```
 
-In order for the application to work, we need to update ```userPoolId``` and ```userPoolWebClientId``` which should be both outputs of your CDK application. Once you have updated the file, rebuild the web application using ```npm run build``` command and redeploy your CDK app. Once redeployed, you should have a working web app.
+In order for the application to work, we need to update the ```region, userPoolId``` and ```userPoolWebClientId``` which should be both outputs of your CDK application. Once you have updated the file, rebuild the web application using ```npm run build``` command and redeploy your CDK app. Once redeployed, you should have a working web app.
