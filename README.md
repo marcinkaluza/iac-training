@@ -10,7 +10,7 @@ to run it on, which is where you come in. Your task is to create a CDK stack con
 First clone this repository to your local machine:
 
 ```
-git clone ....
+git clone https://github.com/marcinkaluza/iac-training.git
 ```
 
 Once the repo has been cloned, open terminal in the `iac-training` directory and execute following commands:
@@ -25,12 +25,12 @@ Make sure that you have valid AWS credentials available by executinig
 ```
 aws sts get-caller-identity
 ```
-Assuming everything worked as expected, you can try to deploy the application by executin ```cdk deploy```. As we haven't defined any resources yet, the application will not provision anything but it will allow to check that everything is working.
+Assuming everything worked as expected, you can try to deploy the application by executing ```cdk deploy```. As we haven't defined any resources yet, the application will not provision anything but it will allow to check that everything is working.
 
 # Building the website
 
-Before you build the infrastructure, yopu will need to build the production version of the website. In order to achieve that, open terminal window in the 
-```iac-training/application/website``` and execute following commands:
+Before you build the infrastructure, you will need to build the production version of the website. In order to achieve that, open terminal window in the 
+```iac-training/application/website``` directory and execute following commands:
 
 ```
 $ npm i
@@ -43,11 +43,11 @@ Open visual studio code. In the ```iac-training``` directory execute
 ```
 $ code .
 ```
-Once the sulution has been opened, open the [application_stack.py](./application/application_stack.py) file and follow the instruction within it.
+Once the solution has been opened, open the [application_stack.py](./application/application_stack.py) file and follow the instruction within it.
 
 # Rebuilding the web application
 
-If you were succesfull in deploying the architecture, accessing the cloudfront URL may present a website, but the website is not quite working yet. In order to make it functional we need to update parameters in the ```iac-training/application/website/src/authconfig.js``` file. This file contains id of the cognito user pool and the application id which our CDK code creates. 
+If you were succesfull in deploying the application, accessing the cloudfront URL may present a website, but the website is not quite working yet. In order to make it functional we need to update parameters in the ```iac-training/application/website/src/authconfig.js``` file. This file contains id of the cognito user pool and the application id which our CDK code creates. 
 
 ```
 const amplifyConfig = {
@@ -69,4 +69,4 @@ const amplifyConfig = {
 };
 ```
 
-In order for the application to work, we need to update ```userPoolId``` and ```userPoolWebClientId``` which should be both outputs of your CDK stack. Once you have updated the file, rebuild the web application using ```npm run build``` command and redeploy your CDK app. Once redeployed, you should have a working web app.
+In order for the application to work, we need to update ```userPoolId``` and ```userPoolWebClientId``` which should be both outputs of your CDK application. Once you have updated the file, rebuild the web application using ```npm run build``` command and redeploy your CDK app. Once redeployed, you should have a working web app.
