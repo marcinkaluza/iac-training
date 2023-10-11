@@ -26,12 +26,10 @@ class PipelineStack(Stack):
                                                           "cdk synth"]
                                                 ))
         
-        stage = AppStage(self, "appstage")
-        
-        pipeline.add_stage(stage=stage)
+        pipeline.add_stage(stage=AppStage(self, "appstage"))
 
 class AppStage(Stage):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        lambdaStack = ApplicationStack(self, "TechuStack")
+        ApplicationStack(self, "TechuStack")
