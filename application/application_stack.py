@@ -19,7 +19,6 @@ import os.path
 
 dirname = os.path.dirname(__file__)
 
-
 class ApplicationStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
