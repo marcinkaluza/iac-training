@@ -6,7 +6,6 @@ from aws_cdk import (
     aws_codecommit as cc
 )
 
-import constructs as _constructs_77d1e7e8
 from aws_cdk.pipelines import CodePipeline, CodePipelineSource, ShellStep
 from constructs import Construct
 from application.application_stack import ApplicationStack

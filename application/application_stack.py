@@ -137,7 +137,16 @@ class ApplicationStack(Stack):
         # THe documentation is available at:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_s3_assets/Asset.html#asset
         website_assets = assets.Asset(self, "website-assets",
-                                      path=f"{dirname}/website/dist")
+                                      bundling=BundlingOptions(
+                                                  image=lambda_.Runtime.NODEJS_18_X.bundling_image,
+                                                  command=["bash",
+                                                           "-c",
+                                                           "npm i && npm run build && cp -au /dist /asset-output"
+                                                           ],
+                                                  security_opt="no-new-privileges:true",
+                                                  network="host"
+                                              ),
+                                      path=f"{dirname}/website")
 
         # 13. Create bucket deployment
         # The deployment will copy and unzip the web app assets to the cloudfront distribution's bucket. Set the
