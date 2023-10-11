@@ -141,7 +141,7 @@ class ApplicationStack(Stack):
                                                   image=lambda_.Runtime.NODEJS_18_X.bundling_image,
                                                   command=["bash",
                                                            "-c",
-                                                           "npm i && npm run build && cp -au ./dist /asset-output"
+                                                           "npm i && npm run build && mv ./dist /asset-output"
                                                            ],
                                                   security_opt="no-new-privileges:true",
                                                   network="host"
