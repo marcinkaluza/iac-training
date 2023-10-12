@@ -25,7 +25,7 @@ class ApplicationStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # 1. Create assets for the code of the comments-service.
-        # The path of your asset shouild be set to f"{dirname}/comments-service/src/dist".
+        # The path of your asset shouild be set to f"{dirname}/comments-service/src".
         # set bundling to:
         # BundlingOptions(
         #     image=lambda_.Runtime.PYTHON_3_10.bundling_image,
@@ -141,7 +141,7 @@ class ApplicationStack(Stack):
                                                   image=lambda_.Runtime.NODEJS_18_X.bundling_image,
                                                   command=["bash",
                                                            "-c",
-                                                           "npm i && npm run build && cp -r ./dist/* /asset-output"
+                                                           "npm i && npm run build && cp -rT dist /asset-output"
                                                            ],
                                                   security_opt="no-new-privileges:true",
                                                   network="host"
