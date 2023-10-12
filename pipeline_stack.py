@@ -28,6 +28,7 @@ class PipelineStack(Stack):
         #   input=CodePipelineSource.code_commit(repo, branch="cicd"),
         #   commands=["npm install -g aws-cdk",
         #             "python -m pip install -r requirements.txt",
+        #             "timeout 15 sh -c \"until docker info; do echo .; sleep 1; done\"",
         #             "cdk synth"]
         # ) 
         # The documentation is availabel at:
