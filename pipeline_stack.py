@@ -19,7 +19,7 @@ class PipelineStack(Stack):
         # Set repository name to something human readable like "app"
         # The documentation is available at:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_codecommit/Repository.html
-        repo = cc.Repository(self, "repo", repository_name="app" )
+        repo = None
 
         # 2) Create CodePipeline 
         # Enable docker for synth, 
@@ -32,14 +32,7 @@ class PipelineStack(Stack):
         # ) 
         # The documentation is availabel at:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.pipelines/CodePipeline.html
-        pipeline = CodePipeline(self, "pipeline",
-                                docker_enabled_for_synth=True,
-                                synth=ShellStep("Synth",
-                                                input=CodePipelineSource.code_commit(repo, branch="cicd"),
-                                                commands=["npm install -g aws-cdk",
-                                                          "python -m pip install -r requirements.txt",
-                                                          "cdk synth"]
-                                                ))
+        pipeline = None
 
         # 3) Once you have created pipeline and repository resources, deploy the app using by executing 'cdk deploy'
         
@@ -47,7 +40,7 @@ class PipelineStack(Stack):
         # git remote add codecommit <URL>         
 
         # 5) Add AppStage to the pipeline         
-        pipeline.add_stage(stage=AppStage(self, "appstage"))
+        
         
         # 6) Commit your changes and push them to the CodeCommit repository by executing
         # git push codecommit cicd
