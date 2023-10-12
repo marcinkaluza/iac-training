@@ -41,8 +41,16 @@ class PipelineStack(Stack):
                                                           "cdk synth"]
                                                 ))
 
-        # 3) Add AppStage to the pipeline         
+        # 3) Once you have created pipeline and repository resources, deploy the app using by executing 'cdk deploy'
+        
+        # 4) Open CodeCommit console and copy the HTTPS clone url, add the repository as new remote by executing 
+        # git remote add codecommit <URL>         
+
+        # 5) Add AppStage to the pipeline         
         pipeline.add_stage(stage=AppStage(self, "appstage"))
+        
+        # 6) Commit your changes and push them to the CodeCommit repository by executing
+        # git push codecommit cicd
 
 class AppStage(Stage):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
